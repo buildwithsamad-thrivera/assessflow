@@ -1,0 +1,21 @@
+{
+ "doctype": "DocType",
+ "name": "Assessment Section",
+ "module": "Assess Flow",
+ "istable": 1,
+ "fields": [
+  {
+   "fieldname": "section_name",
+   "fieldtype": "Data",
+   "label": "Section Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "instructions",
+   "fieldtype": "Text Editor",
+   "label": "Section Instructions"
+  }
+ ],
+ "permissions": []
+}

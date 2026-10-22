@@ -1,0 +1,132 @@
+{
+ "actions": [],
+ "autoname": "format:ANS-{#####}",
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "attempt",
+  "question",
+  "saved_at",
+  "display_answer",
+  "answer_payload",
+  "submitted_payload",
+  "marked_for_review",
+  "run_count",
+  "awarded_marks",
+  "is_evaluated",
+  "needs_manual_review",
+  "question_snapshot"
+ ],
+ "fields": [
+  {
+   "fieldname": "attempt",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Attempt",
+   "options": "Candidate Attempt",
+   "reqd": 1
+  },
+  {
+   "fieldname": "question",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "label": "Question",
+   "options": "Question Bank",
+   "reqd": 1
+  },
+  {
+   "fieldname": "saved_at",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Saved At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "answer_payload",
+   "fieldtype": "Long Text",
+   "label": "Answer"
+  },
+  {
+   "fieldname": "submitted_payload",
+   "fieldtype": "Long Text",
+   "label": "Submitted",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "marked_for_review",
+   "fieldtype": "Check",
+   "label": "Marked for Review"
+  },
+  {
+   "default": "0",
+   "fieldname": "run_count",
+   "fieldtype": "Int",
+   "label": "Code Run Count"
+  },
+  {
+   "fieldname": "awarded_marks",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Awarded",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_evaluated",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Evaluated",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_manual_review",
+   "fieldtype": "Check",
+   "label": "Needs Manual Review",
+   "read_only": 1
+  },
+  {
+   "fieldname": "question_snapshot",
+   "fieldtype": "Long Text",
+   "hidden": 1,
+   "label": "Question Snapshot"
+  },
+  {
+   "fieldname": "display_answer",
+   "fieldtype": "Text",
+   "label": "Display Answer",
+   "read_only": 1,
+   "in_list_view": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-22 13:32:16.090969",
+ "modified_by": "Administrator",
+ "module": "Assess Flow",
+ "name": "Candidate Answer",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

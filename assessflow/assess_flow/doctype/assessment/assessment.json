@@ -1,0 +1,140 @@
+{
+ "actions": [],
+ "autoname": "format:ASSESS-{YYYY}-{#####}",
+ "creation": "2024-01-01 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "assessment_title",
+  "status",
+  "duration_minutes",
+  "pass_percentage",
+  "description",
+  "instructions",
+  "sections",
+  "questions",
+  "randomize_questions",
+  "allow_backward_navigation",
+  "allow_test_run",
+  "max_code_runs",
+  "show_test_results",
+  "show_result_immediately"
+ ],
+ "fields": [
+  {
+   "fieldname": "assessment_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nPublished\nArchived"
+  },
+  {
+   "default": "30",
+   "fieldname": "duration_minutes",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Duration (minutes)",
+   "reqd": 1
+  },
+  {
+   "default": "40",
+   "fieldname": "pass_percentage",
+   "fieldtype": "Float",
+   "label": "Pass %"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "instructions",
+   "fieldtype": "Text Editor",
+   "label": "Instructions"
+  },
+  {
+   "fieldname": "questions",
+   "fieldtype": "Table",
+   "label": "Questions",
+   "options": "Assessment Question"
+  },
+  {
+   "default": "0",
+   "fieldname": "randomize_questions",
+   "fieldtype": "Check",
+   "label": "Randomize order"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_backward_navigation",
+   "fieldtype": "Check",
+   "label": "Allow back navigation"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_test_run",
+   "fieldtype": "Check",
+   "label": "Allow candidates to run code"
+  },
+  {
+   "default": "10",
+   "fieldname": "max_code_runs",
+   "fieldtype": "Int",
+   "label": "Max code runs per question"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_test_results",
+   "fieldtype": "Check",
+   "label": "Show test results to candidate"
+  },
+  {
+   "fieldname": "sections",
+   "fieldtype": "Table",
+   "label": "Sections",
+   "options": "Assessment Section"
+  },
+  {
+   "fieldname": "show_result_immediately",
+   "fieldtype": "Check",
+   "label": "Show score immediately on submit",
+   "default": "1"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-22 13:29:28.625732",
+ "modified_by": "Administrator",
+ "module": "Assess Flow",
+ "name": "Assessment",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "assessment_title",
+ "is_submittable": 1
+}

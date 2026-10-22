@@ -1,0 +1,180 @@
+{% extends "templates/web.html" %}
+{% block title %}Assessment{% endblock %}
+{% block head_include %}
+<link rel="stylesheet" href="/assets/assessflow/css/assessment.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/edit/matchbrackets.min.js"></script>
+{% endblock %}
+{% block page_content %}
+<div id="af-app" data-token="{{ token }}">
+
+  <!-- Loading -->
+  <div id="af-loading" class="af-center-screen">
+    <div class="af-spinner"></div>
+    <p>Loading your assessment...</p>
+  </div>
+
+  <!-- Error -->
+  <div id="af-error" class="af-center-screen af-hidden">
+    <div class="af-card af-center-card">
+      <div class="af-icon-error">⚠</div>
+      <h2>Something went wrong</h2>
+      <p id="af-error-msg"></p>
+      <button onclick="location.reload()" class="af-btn af-btn-secondary">Retry</button>
+    </div>
+  </div>
+
+  <!-- Landing -->
+  <div id="af-landing" class="af-center-screen af-hidden">
+    <div class="af-card af-landing-card">
+      <div class="af-badge-top">Assessment</div>
+      <h1 id="af-title"></h1>
+      <div id="af-description" class="af-rich"></div>
+      
+      <div class="af-meta-grid">
+        <div><div class="af-meta-label">Candidate</div><div class="af-meta-value" id="af-candidate"></div></div>
+        <div><div class="af-meta-label">Duration</div><div class="af-meta-value"><span id="af-duration"></span> mins</div></div>
+        <div><div class="af-meta-label">Questions</div><div class="af-meta-value" id="af-qcount"></div></div>
+      </div>
+
+      <div id="af-instructions" class="af-rich af-instructions af-hidden"></div>
+      
+      <label class="af-checkbox">
+        <input type="checkbox" id="af-accept">
+        <span>I have read the instructions. I agree to the anti-cheat policies. The timer starts immediately upon clicking Start.</span>
+      </label>
+      
+      <button id="af-start" class="af-btn af-btn-primary af-btn-lg" disabled>Start Assessment</button>
+    </div>
+  </div>
+
+  <!-- Main Assessment Interface -->
+  <div id="af-attempt" class="af-hidden">
+    
+    <!-- Top Header -->
+    <header class="af-header">
+      <div class="af-header-left">
+        <button class="af-mobile-toggle" id="af-mobile-toggle">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <div class="af-header-title-group">
+          <div class="af-header-title" id="af-assess-title"></div>
+          <div class="af-progress-wrap">
+            <div class="af-progress-bar"><div id="af-progress-fill"></div></div>
+            <span class="af-progress-text"><span id="af-progress-current">0</span> / <span id="af-progress-total"></span> answered</span>
+          </div>
+        </div>
+      </div>
+      <div class="af-header-right">
+        <div class="af-save-status" id="af-save-status"><span class="af-dot af-dot-ok"></span> Saved</div>
+        <div class="af-timer" id="af-timer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span id="af-timer-text">--:--:--</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Body Layout -->
+    <div class="af-layout">
+      
+      <!-- Sidebar -->
+      <aside class="af-sidebar" id="af-sidebar">
+        <div class="af-sidebar-header">
+          <span>Questions</span>
+          <button class="af-close-mobile" id="af-close-sidebar">✕</button>
+        </div>
+        <div class="af-nav-scroll" id="af-nav"></div>
+        <div class="af-sidebar-footer">
+          <div class="af-legend">
+            <div><span class="af-leg-box af-leg-answered"></span> Answered</div>
+            <div><span class="af-leg-box af-leg-current"></span> Current</div>
+            <div><span class="af-leg-box af-leg-marked"></span> Marked</div>
+          </div>
+          <button class="af-btn af-btn-danger af-btn-block" id="af-open-submit">Submit Assessment</button>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="af-main">
+        <div class="af-workspace" id="af-workspace">
+          
+          <!-- Left Pane (Question Text) -->
+          <div class="af-pane af-pane-left">
+            <div class="af-q-header">
+              <div>
+                <div class="af-q-number">Question <span id="af-q-num"></span></div>
+                <div class="af-q-badges" id="af-q-badges"></div>
+              </div>
+              <button class="af-mark-btn" id="af-mark-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                <span id="af-mark-label">Mark for review</span>
+              </button>
+            </div>
+            <div class="af-pane-scroll" id="af-question"></div>
+          </div>
+
+          <!-- Right Pane (Code Editor - Hidden for non-coding questions) -->
+          <div class="af-pane af-pane-right af-hidden" id="af-pane-right">
+            <div id="af-editor-container"></div>
+          </div>
+
+        </div>
+        
+        <!-- Bottom Footer -->
+        <div class="af-footer">
+          <button class="af-btn af-btn-secondary" id="af-prev">← Previous</button>
+          <div class="af-footer-right">
+            <span class="af-hint">Use ← → arrow keys to navigate</span>
+            <button class="af-btn af-btn-primary" id="af-next">Next →</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Submit Modal -->
+  <div id="af-submit-modal" class="af-modal af-hidden">
+    <div class="af-card af-modal-card">
+      <h2>Submit assessment?</h2>
+      <p>You cannot change your answers after submitting.</p>
+      <div class="af-submit-summary" id="af-submit-summary"></div>
+      <div class="af-modal-actions">
+        <button class="af-btn af-btn-secondary" id="af-cancel-submit">Keep working</button>
+        <button class="af-btn af-btn-danger" id="af-confirm-submit">Submit now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done Screen -->
+  <div id="af-done" class="af-center-screen af-hidden">
+    <div class="af-card af-center-card">
+      <div class="af-icon-success">✓</div>
+      <h1>Assessment Submitted</h1>
+      <p id="af-done-msg" class="af-done-msg">Thank you for completing the assessment.</p>
+      <div class="af-ref-box">
+        <div class="af-meta-label">Submission Reference</div>
+        <code id="af-done-ref-value"></code>
+      </div>
+      <p class="af-muted">You may now close this window.</p>
+    </div>
+  </div>
+
+  <!-- Warning Modal -->
+  <div id="af-warning-modal" class="af-modal af-hidden">
+    <div class="af-card af-modal-card af-warning-card">
+      <div class="af-icon-error">⚠</div>
+      <h2 id="af-warning-title">Prohibited Action</h2>
+      <p id="af-warning-msg"></p>
+      <button class="af-btn af-btn-danger af-btn-block" id="af-warning-close">I Understand</button>
+    </div>
+  </div>
+
+</div>
+<script>window.ASSESSFLOW_TOKEN = {{ token|tojson }}; window.CSRF_TOKEN = {{ csrf_token|tojson }};</script>
+<script src="/assets/assessflow/js/assessment.js"></script>
+{% endblock %}
